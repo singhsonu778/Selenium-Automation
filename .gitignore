@@ -3,3 +3,8 @@
 .project
 .classpath
 bin/
+
+#intellij idea files
+.idea/
+out/
+Selenium-Automation.iml
