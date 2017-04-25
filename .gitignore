@@ -6,5 +6,5 @@ bin/
 
 #intellij idea files
 .idea/
-out/
+target/
 Selenium-Automation.iml
