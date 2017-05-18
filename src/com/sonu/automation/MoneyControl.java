@@ -28,7 +28,9 @@ public class MoneyControl {
 		readFile(args[0]);
 
 		urls.forEach(url -> {
+
 			openURLandPerformActions(url);
+
 			openAndSwitchToNewTab();
 		});
 	}
@@ -50,7 +52,7 @@ public class MoneyControl {
 			bufferedWriter.write(url);
 			bufferedWriter.write("\n");
 			urlCount++;
-			
+
 			if (urlCount == 25) {
 				bufferedWriter.close();
 				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock2.txt")));
@@ -95,7 +97,7 @@ public class MoneyControl {
 		hoverOver("indicators");
 		click("volume");
 
-		hoverOver("1day");
+		hoverOver("low-box");
 	}
 
 	private static void openAndSwitchToNewTab() {
