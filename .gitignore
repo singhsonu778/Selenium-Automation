@@ -8,3 +8,6 @@ bin/
 .idea/
 target/
 Selenium-Automation.iml
+
+#generated files
+data/
