@@ -20,55 +20,21 @@ import org.openqa.selenium.interactions.Actions;
 public class MoneyControl {
 	private static WebDriver driver;
 	private static int tabIndex = 0;
+	private static int outputFileIndex = 1;
 	private static List<String> urls = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
 		setUp();
-		writeBookmarksToFile();
-		readFile(args[0]);
+
+		writeBookmarksToFile(1);
+		writeBookmarksToFile(2);
+
+		populateUrlsFromFile(args[0]);
 
 		urls.forEach(url -> {
-
 			openURLandPerformActions(url);
-
 			openAndSwitchToNewTab();
 		});
-	}
-
-	private static void writeBookmarksToFile() throws IOException {
-		int urlCount = 0;
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/bookmarks.txt")));
-		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock1.txt")));
-
-		String line = "";
-		while ((line = bufferedReader.readLine()) != null) {
-			int startIndex = line.indexOf("HREF");
-			int endIndex = line.indexOf("#");
-			String url = "";
-			if (endIndex == -1) {
-				endIndex = line.indexOf("\"", 50);
-			}
-			url = line.substring(startIndex + 6, endIndex) + "#compare_frm";
-			bufferedWriter.write(url);
-			bufferedWriter.write("\n");
-			urlCount++;
-
-			if (urlCount == 25) {
-				bufferedWriter.close();
-				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock2.txt")));
-			} else if (urlCount == 50) {
-				bufferedWriter.close();
-				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock3.txt")));
-			} else if (urlCount == 75) {
-				bufferedWriter.close();
-				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock4.txt")));
-			} else if (urlCount == 100) {
-				bufferedWriter.close();
-				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock5.txt")));
-			}
-		}
-		bufferedReader.close();
-		bufferedWriter.close();
 	}
 
 	private static void setUp() {
@@ -78,10 +44,42 @@ public class MoneyControl {
 		driver = new ChromeDriver(options);
 	}
 
-	private static void readFile(String index) throws IOException {
-		String filename = "data/stock" + index + ".txt";
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filename)));
+	private static void writeBookmarksToFile(int readFileIndex) throws IOException {
+		int urlCount = 0;
+		String line = "";
+
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/bookmarks" + readFileIndex + ".txt")));
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock" + outputFileIndex + ".txt")));
+
+		while ((line = bufferedReader.readLine()) != null) {
+			bufferedWriter.write(extractUrl(line));
+			bufferedWriter.write("\n");
+			urlCount++;
+
+			if (urlCount == 25) {
+				bufferedWriter.close();
+				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock" + ++outputFileIndex + ".txt")));
+				urlCount = 0;
+			}
+		}
+		outputFileIndex++;
+		bufferedReader.close();
+		bufferedWriter.close();
+	}
+
+	private static String extractUrl(String line) {
+		int startIndex = line.indexOf("HREF");
+		int endIndex = line.indexOf("#");
+		if (endIndex == -1) {
+			endIndex = line.indexOf("\"", 50);
+		}
+		return line.substring(startIndex + 6, endIndex) + "#compare_frm";
+	}
+
+	private static void populateUrlsFromFile(String readFileIndex) throws IOException {
 		String url = "";
+		String filename = "data/stock" + readFileIndex + ".txt";
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filename)));
 		while ((url = bufferedReader.readLine()) != null) {
 			urls.add(url);
 		}
