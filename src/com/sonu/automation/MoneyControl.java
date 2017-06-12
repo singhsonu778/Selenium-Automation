@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PipedWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,17 +26,29 @@ public class MoneyControl {
 	private static List<String> urls = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
-		setUp();
+		try {
 
-		writeBookmarksToFile(1);
-		writeBookmarksToFile(2);
+			setUp();
 
-		populateUrlsFromFile(args[0]);
+			writeBookmarksToFile(1);
+			writeBookmarksToFile(2);
 
-		urls.forEach(url -> {
-			openURLandPerformActions(url);
-			openAndSwitchToNewTab();
-		});
+			populateUrlsFromFile(args[0]);
+
+			urls.forEach(url -> {
+				openURLandPerformActions(url);
+				openAndSwitchToNewTab();
+			});
+
+		} catch (Exception e) {
+			logErrorToFile(e);
+		}
+	}
+
+	private static void logErrorToFile(Exception e) throws IOException {
+		PrintWriter printWriter = new PrintWriter(new File("logs/logs.txt"));
+		e.printStackTrace(printWriter);
+		printWriter.close();
 	}
 
 	private static void setUp() {
