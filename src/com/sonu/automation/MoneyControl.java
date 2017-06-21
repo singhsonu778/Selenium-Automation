@@ -3,6 +3,7 @@ package com.sonu.automation;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,28 +27,39 @@ public class MoneyControl {
 	private static List<String> urls = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
-		try {
+		setUp();
 
-			setUp();
+		clearLogFileContents();
 
-			writeBookmarksToFile(1);
-			writeBookmarksToFile(2);
+		writeBookmarksToFile(1);
+		writeBookmarksToFile(2);
 
-			populateUrlsFromFile(args[0]);
+		populateUrlsFromFile(args[0]);
 
-			urls.forEach(url -> {
+		urls.forEach(url -> {
+			try {
 				openURLandPerformActions(url);
-				openAndSwitchToNewTab();
-			});
-
-		} catch (Exception e) {
-			logErrorToFile(e);
-		}
+			} catch (TimeoutException e) {
+				logErrorToFile(e);
+			}
+			openAndSwitchToNewTab();
+		});
 	}
 
-	private static void logErrorToFile(Exception e) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new File("logs/logs.txt"));
+	private static void logErrorToFile(TimeoutException e) {
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(new FileWriter(new File("logs/logs.txt"), true));
+		} catch (IOException ex) {}
+		printWriter.write(driver.getTitle());
+		printWriter.write("\n");
 		e.printStackTrace(printWriter);
+		printWriter.write("\n");
+		printWriter.close();
+	}
+
+	private static void clearLogFileContents() throws FileNotFoundException {
+		PrintWriter printWriter = new PrintWriter(new File("logs/logs.txt"));
 		printWriter.close();
 	}
 
