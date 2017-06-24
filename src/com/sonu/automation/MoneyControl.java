@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -39,14 +38,14 @@ public class MoneyControl {
 		urls.forEach(url -> {
 			try {
 				openURLandPerformActions(url);
-			} catch (TimeoutException e) {
+			} catch (Exception e) {
 				logErrorToFile(e);
 			}
 			openAndSwitchToNewTab();
 		});
 	}
 
-	private static void logErrorToFile(TimeoutException e) {
+	private static void logErrorToFile(Exception e) {
 		PrintWriter printWriter = null;
 		try {
 			printWriter = new PrintWriter(new FileWriter(new File("logs/logs.txt"), true));
