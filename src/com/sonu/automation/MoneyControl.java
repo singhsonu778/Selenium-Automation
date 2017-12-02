@@ -22,6 +22,7 @@ import org.openqa.selenium.interactions.Actions;
 public class MoneyControl {
 	private static WebDriver driver;
 	private static int tabIndex = 0;
+	private static int outputFileIndex = 1;
 	private static List<String> urls = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
@@ -32,7 +33,7 @@ public class MoneyControl {
 		writeBookmarksToFile(1);
 		writeBookmarksToFile(2);
 
-		populateUrlsFromFile(args[0]);
+		/*populateUrlsFromFile(args[0]);
 
 		urls.forEach(url -> {
 			try {
@@ -41,7 +42,7 @@ public class MoneyControl {
 				logErrorToFile(e);
 			}
 			openAndSwitchToNewTab();
-		});
+		});*/
 	}
 
 
@@ -59,7 +60,6 @@ public class MoneyControl {
 
 	private static void writeBookmarksToFile(int readFileIndex) throws IOException {
 		int urlCount = 0;
-		int outputFileIndex = 1;
 		String line = "";
 
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/bookmarks" + readFileIndex + ".txt")));
