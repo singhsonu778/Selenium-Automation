@@ -8,7 +8,9 @@ bin/
 .idea/
 target/
 Selenium-Automation.iml
+Spring.iml
 
 #generated files
 data/
 logs/
+debug.log

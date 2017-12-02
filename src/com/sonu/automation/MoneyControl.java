@@ -22,7 +22,6 @@ import org.openqa.selenium.interactions.Actions;
 public class MoneyControl {
 	private static WebDriver driver;
 	private static int tabIndex = 0;
-	private static int outputFileIndex = 1;
 	private static List<String> urls = new ArrayList<>();
 
 	public static void main(String[] args) throws IOException {
@@ -45,22 +44,6 @@ public class MoneyControl {
 		});
 	}
 
-	private static void logErrorToFile(Exception e) {
-		PrintWriter printWriter = null;
-		try {
-			printWriter = new PrintWriter(new FileWriter(new File("logs/logs.txt"), true));
-		} catch (IOException ex) {}
-		printWriter.write(driver.getTitle());
-		printWriter.write("\n");
-		e.printStackTrace(printWriter);
-		printWriter.write("\n");
-		printWriter.close();
-	}
-
-	private static void clearLogFileContents() throws FileNotFoundException {
-		PrintWriter printWriter = new PrintWriter(new File("logs/logs.txt"));
-		printWriter.close();
-	}
 
 	private static void setUp() {
 		System.setProperty("webdriver.chrome.driver", "chromedriver/chromedriver.exe");
@@ -69,8 +52,14 @@ public class MoneyControl {
 		driver = new ChromeDriver(options);
 	}
 
+	private static void clearLogFileContents() throws FileNotFoundException {
+		PrintWriter printWriter = new PrintWriter(new File("logs/logs.txt"));
+		printWriter.close();
+	}
+
 	private static void writeBookmarksToFile(int readFileIndex) throws IOException {
 		int urlCount = 0;
+		int outputFileIndex = 1;
 		String line = "";
 
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("data/bookmarks" + readFileIndex + ".txt")));
@@ -81,7 +70,7 @@ public class MoneyControl {
 			bufferedWriter.write("\n");
 			urlCount++;
 
-			if (urlCount == 25) {
+			if (urlCount == 10) {
 				bufferedWriter.close();
 				bufferedWriter = new BufferedWriter(new FileWriter(new File("data/stock" + ++outputFileIndex + ".txt")));
 				urlCount = 0;
@@ -123,12 +112,6 @@ public class MoneyControl {
 		hoverOver("low-box");
 	}
 
-	private static void openAndSwitchToNewTab() {
-		((JavascriptExecutor) driver).executeScript("window.open()");
-		ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-		driver.switchTo().window(tabs.get(++tabIndex));
-	}
-
 	private static void hoverOver(String elementId) {
 		Actions builder = new Actions(driver);
 		WebElement element = driver.findElement(By.id(elementId));
@@ -138,5 +121,23 @@ public class MoneyControl {
 	private static void click(String elementId) {
 		WebElement element = driver.findElement(By.id(elementId));
 		element.click();
+	}
+
+	private static void openAndSwitchToNewTab() {
+		((JavascriptExecutor) driver).executeScript("window.open()");
+		ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+		driver.switchTo().window(tabs.get(++tabIndex));
+	}
+
+	private static void logErrorToFile(Exception e) {
+		PrintWriter printWriter = null;
+		try {
+			printWriter = new PrintWriter(new FileWriter(new File("logs/logs.txt"), true));
+		} catch (IOException ex) {}
+		printWriter.write(driver.getTitle());
+		printWriter.write("\n");
+		e.printStackTrace(printWriter);
+		printWriter.write("\n");
+		printWriter.close();
 	}
 }
