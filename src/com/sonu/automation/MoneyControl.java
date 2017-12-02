@@ -33,7 +33,7 @@ public class MoneyControl {
 		writeBookmarksToFile(1);
 		writeBookmarksToFile(2);
 
-		/*populateUrlsFromFile(args[0]);
+		populateUrlsFromFile(args[0]);
 
 		urls.forEach(url -> {
 			try {
@@ -42,7 +42,7 @@ public class MoneyControl {
 				logErrorToFile(e);
 			}
 			openAndSwitchToNewTab();
-		});*/
+		});
 	}
 
 
