@@ -104,10 +104,17 @@ public class MoneyControl {
 		driver.get(url);
 
 		hoverOver("chartType");
-		click("candlestick");
+		clickById("candlestick");
 
 		hoverOver("indicators");
-		click("volume");
+		clickById("volume");
+
+		hoverOver("indicators");
+		clickById("rsi");
+		clickByClass("draw_btn");
+
+		hoverOver("indicators");
+		clickById("macd");
 
 		hoverOver("low-box");
 	}
@@ -118,8 +125,13 @@ public class MoneyControl {
 		builder.moveToElement(element).build().perform();
 	}
 
-	private static void click(String elementId) {
+	private static void clickById(String elementId) {
 		WebElement element = driver.findElement(By.id(elementId));
+		element.click();
+	}
+
+	private static void clickByClass(String elementClass) {
+		WebElement element = driver.findElement(By.className(elementClass));
 		element.click();
 	}
 
