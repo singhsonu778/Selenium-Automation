@@ -116,6 +116,20 @@ public class MoneyControl {
 		hoverOver("indicators");
 		clickById("macd");
 
+		hoverOver("overlays");
+		clickById("ema");
+
+		enterValueInElement("30", "window0");
+		enterValueInElement("50", "window1");
+		enterValueInElement("100", "window2");
+		clickByClass("draw_btn");
+
+		hoverOver("overlays");
+		clickById("sma");
+
+		enterValueInElement("200", "window0");
+		clickByClass("draw_btn");
+
 		hoverOver("low-box");
 	}
 
@@ -133,6 +147,11 @@ public class MoneyControl {
 	private static void clickByClass(String elementClass) {
 		WebElement element = driver.findElement(By.className(elementClass));
 		element.click();
+	}
+
+	private static void enterValueInElement(String value, String elementId) {
+		WebElement element = driver.findElement(By.id(elementId));
+		element.sendKeys(value);
 	}
 
 	private static void openAndSwitchToNewTab() {
