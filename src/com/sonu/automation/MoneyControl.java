@@ -103,55 +103,63 @@ public class MoneyControl {
 	private static void openURLandPerformActions(String url) {
 		driver.get(url);
 
-		hoverOver("chartType");
-		clickById("candlestick");
+		hoverOverElementById("chartType");
+		clickElementById("candlestick");
 
-		hoverOver("indicators");
-		clickById("volume");
+		hoverOverElementById("indicators");
+		clickElementById("volume");
 
-		hoverOver("indicators");
-		clickById("rsi");
-		clickByClass("draw_btn");
+		hoverOverElementById("indicators");
+		clickElementById("rsi");
+		clickElementByClass("draw_btn");
 
-		hoverOver("indicators");
-		clickById("macd");
+		hoverOverElementById("indicators");
+		clickElementById("macd");
 
-		hoverOver("overlays");
-		clickById("ema");
+		hoverOverElementById("overlays");
+		clickElementById("ema");
 
-		enterValueInElement("30", "window0");
-		enterValueInElement("50", "window1");
-		enterValueInElement("100", "window2");
-		clickByClass("draw_btn");
+		enterValueInElementById("30", "window0");
+		enterValueInElementById("50", "window1");
+		enterValueInElementById("100", "window2");
+		clickElementByClass("draw_btn");
 
-		hoverOver("overlays");
-		clickById("sma");
+		hoverOverElementById("overlays");
+		clickElementById("sma");
 
-		enterValueInElement("200", "window0");
-		clickByClass("draw_btn");
+		enterValueInElementById("200", "window0");
+		clickElementByClass("draw_btn");
 
-		hoverOver("low-box");
+		hoverOverElementById("low-box");
 	}
 
-	private static void hoverOver(String elementId) {
+	private static void hoverOverElementById(String elementId) {
 		Actions builder = new Actions(driver);
-		WebElement element = driver.findElement(By.id(elementId));
+		WebElement element = getWebElementById(elementId);
 		builder.moveToElement(element).build().perform();
 	}
 
-	private static void clickById(String elementId) {
-		WebElement element = driver.findElement(By.id(elementId));
+	private static void clickElementById(String elementId) {
+		WebElement element = getWebElementById(elementId);
 		element.click();
 	}
 
-	private static void clickByClass(String elementClass) {
-		WebElement element = driver.findElement(By.className(elementClass));
+	private static void clickElementByClass(String elementClass) {
+		WebElement element = getWebElementByClass(elementClass);
 		element.click();
 	}
 
-	private static void enterValueInElement(String value, String elementId) {
-		WebElement element = driver.findElement(By.id(elementId));
+	private static void enterValueInElementById(String value, String elementId) {
+		WebElement element = getWebElementById(elementId);
 		element.sendKeys(value);
+	}
+
+	private static WebElement getWebElementById(String elementId) {
+		return driver.findElement(By.id(elementId));
+	}
+
+	private static WebElement getWebElementByClass(String elementClass) {
+		return driver.findElement(By.className(elementClass));
 	}
 
 	private static void openAndSwitchToNewTab() {
